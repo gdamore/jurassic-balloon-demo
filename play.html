@@ -1,0 +1,53 @@
+<!doctype html>
+<!-- Copyright 2026 Staysail Systems, Inc. All rights reserved. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#142e2c">
+  <title>Jurassic Balloon — Early Development Build</title>
+  <link rel="icon" href="icon.png">
+  <style>
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #142e2c; overscroll-behavior: none; }
+    body { touch-action: none; -webkit-user-select: none; user-select: none; }
+    #status { position: fixed; inset: 0; z-index: 10; display: grid; place-content: center; padding: 24px; color: #eee7d7; font: 17px/1.6 system-ui, sans-serif; text-align: center; background: #142e2c; }
+    #status[hidden] { display: none; }
+    #status h1 { font: 30px Georgia, serif; font-weight: normal; margin-bottom: 8px; }
+    #status p { max-width: 440px; }
+    #status a { color: inherit; }
+  </style>
+</head>
+<body>
+  <div id="status" role="status"><h1>Jurassic Balloon</h1><p id="message">Loading the free first episode…<br>Early development build</p></div>
+  <script src="wasm_exec.js"></script>
+  <script>
+    const statusPanel = document.getElementById('status');
+    const message = document.getElementById('message');
+    function fail(error) {
+      console.error(error);
+      message.textContent = 'The game could not start. Reload to try again, and check that your browser supports WebAssembly and WebGL.';
+      statusPanel.hidden = false;
+    }
+    window.addEventListener('error', event => fail(event.error || event.message));
+    window.addEventListener('unhandledrejection', event => fail(event.reason));
+    async function start() {
+      if (!window.WebAssembly || !window.Go) throw new Error('WebAssembly runtime unavailable');
+      const response = await fetch('game.wasm');
+      if (!response.ok) throw new Error('Game download failed: ' + response.status);
+      const go = new Go();
+      const mime = (response.headers.get('content-type') || '').split(';')[0].trim();
+      const result = mime === 'application/wasm' && WebAssembly.instantiateStreaming
+        ? await WebAssembly.instantiateStreaming(response, go.importObject)
+        : await WebAssembly.instantiate(await response.arrayBuffer(), go.importObject);
+      const observer = new MutationObserver(() => {
+        if (document.querySelector('canvas')) { statusPanel.hidden = true; observer.disconnect(); }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+      await go.run(result.instance);
+      throw new Error('Game runtime exited');
+    }
+    start().catch(fail);
+  </script>
+</body>
+</html>
