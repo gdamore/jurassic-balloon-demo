@@ -1,5 +1,5 @@
 {
-  "sourceRevision": "e15508d1b4013b40fb79f8222ec6b8b47dbd5498",
+  "sourceRevision": "6300bdf1fa25a7b4dc2acd2bfd09f99198c97b44",
   "goVersion": "go version go1.26.1 darwin/arm64",
-  "wasmSHA256": "35abfda7be09ed2d2ff7bd18115c325eaedb002664ac3c1622e10fba85013fd6"
+  "wasmSHA256": "2e7d716b356264a6e88c9cd13475140098c7f13e6b022657b4e993e73fd150cc"
 }
