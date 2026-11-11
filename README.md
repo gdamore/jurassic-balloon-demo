@@ -10,7 +10,7 @@ This is a proprietary game, not an open-source release. Audio and font
 attributions and their separate licenses are available in the game's Credits.
 The Go WebAssembly runtime license is included in GO_WASM_LICENSE.txt.
 
-Source revision: `6300bdf1fa25a7b4dc2acd2bfd09f99198c97b44`. Build details are in build.json.
+Source revision: `0d26ed72983785da53ef3730e08c9755709d7865`. Build details are in build.json.
 
 Both HTML pages ask cooperating search engines not to index this preview.
 This site and repository are public; the link can be opened and shared.

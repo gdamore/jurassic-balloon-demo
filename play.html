@@ -33,7 +33,7 @@
     window.addEventListener('unhandledrejection', event => fail(event.reason));
     async function start() {
       if (!window.WebAssembly || !window.Go) throw new Error('WebAssembly runtime unavailable');
-      const response = await fetch('game.wasm');
+      const response = await fetch('game.wasm?v=0.2', {cache: 'no-cache'});
       if (!response.ok) throw new Error('Game download failed: ' + response.status);
       const go = new Go();
       const mime = (response.headers.get('content-type') || '').split(';')[0].trim();
